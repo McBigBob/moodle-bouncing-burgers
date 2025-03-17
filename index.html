@@ -1,0 +1,53 @@
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const BURGER_COUNT = 3; // Number of burgers to display
+        const EDGE_MARGIN = 0.1; // Margin from the edges of the screen (10%)
+
+        let pageContainer = document.getElementById("page");
+        if (!pageContainer) return;
+
+        let burgers = [];
+
+        for (let i = 0; i < BURGER_COUNT; i++) {
+            let burger = document.createElement("img");
+            burger.src = "https://static.vecteezy.com/system/resources/previews/025/064/824/large_2x/hamburger-with-ai-generated-free-png.png";
+            burger.style.position = "fixed";
+            burger.style.width = "100px";
+            burger.style.zIndex = "9999";
+            burger.style.pointerEvents = "none";
+
+            pageContainer.appendChild(burger);
+
+            const maxX = window.innerWidth;
+            const maxY = window.innerHeight;
+            const marginX = maxX * EDGE_MARGIN;
+            const marginY = maxY * EDGE_MARGIN;
+
+            let x = marginX + Math.random() * (maxX - 2 * marginX);
+            let y = marginY + Math.random() * (maxY - 2 * marginY);
+            let dx = (Math.random() > 0.5 ? 1 : -1) * (2 + Math.random() * 3);
+            let dy = (Math.random() > 0.5 ? 1 : -1) * (2 + Math.random() * 3);
+
+            burgers.push({ burger, x, y, dx, dy });
+        }
+
+        function moveBurgers() {
+            const maxX = window.innerWidth;
+            const maxY = window.innerHeight;
+
+            burgers.forEach(b => {
+                b.x += b.dx;
+                b.y += b.dy;
+
+                if (b.x <= 0 || b.x >= maxX - b.burger.clientWidth) b.dx = -b.dx;
+                if (b.y <= 0 || b.y >= maxY - b.burger.clientHeight) b.dy = -b.dy;
+
+                b.burger.style.transform = `translate(${b.x}px, ${b.y}px)`;
+            });
+
+            requestAnimationFrame(moveBurgers);
+        }
+
+        moveBurgers();
+    });
+</script>
